@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>NoqcEgG.jpg</file>
+        <file>1_1.png</file>
+        <file>2_2.png</file>
+        <file>3_3.png</file>
+        <file>4_4.png</file>
+        <file>5_5.png</file>
+        <file>gameofsprints.png</file>
+        <file>deadlineiscoming.png</file>
+        <file>button1.png</file>
+        <file>button2.png</file>
+        <file>button3.png</file>
+        <file>ind1.png</file>
+        <file>ind2.png</file>
+        <file>ind3.png</file>
+        <file>fire.png</file>
+    </qresource>
+</RCC>
