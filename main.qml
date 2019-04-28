@@ -4,12 +4,41 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.12
 import QtCharts 2.3
+import QtQuick.Particles 2.12
+import QtQuick.Window 2.12
+
 ApplicationWindow {
     id : appWindow
     visible: true
     width: 600
     height: 800
     title: qsTr("Hello World")
+    header: Rectangle{
+        id : hdr
+        visible: false
+        color: "black"
+        height: 50
+        RowLayout{
+            anchors.fill: parent
+            Image{
+                Layout.fillHeight: true
+                Layout.preferredWidth: 50
+                fillMode: Image.PreserveAspectFit
+                source: "qrc:/star2.png"
+            }
+            Label{
+                id:stat
+                text:"3"
+                color: "yellow"
+                font.pixelSize: 30
+            }
+            Label{
+                text:"Личная статистика"
+                color: "yellow"
+                font.pixelSize: 30
+            }
+        }
+    }
 
     Timer{ // таймер анимации заставки
         id : startupTmr
@@ -26,6 +55,7 @@ ApplicationWindow {
             opacityAnimation2.start();
             opacityAnimation2.start();
             opacityAnimation3.start();
+            hdr.visible = true;
         }
     }
 
@@ -133,21 +163,16 @@ ApplicationWindow {
 
         anchors.top: parent.top
         width: parent.width
-        //anchors.left: parent.left
-        //anchors.right: parent.right
         anchors.bottom: indicator.top
 
         Page{ // список команд
-            //opacity: 0.5
             background: Item{
                 opacity: 0.2
             }
 
             PathView {
                 id: pathView
-                //opacity: 0.5
                 anchors.fill: parent
-                //highlight: appHighlight
                 preferredHighlightBegin: 0.5
                 preferredHighlightEnd: 0.5
                 focus: true
@@ -207,14 +232,13 @@ ApplicationWindow {
 
                 delegate:
                     Item{
-                        width: 400
+                        width: swipe.width-20
                         height: 150
                         Rectangle{
                             id : delegate
                             color: clr
                             opacity: 0.9
-                            width: 500
-                            height: 150
+                            anchors.fill: parent
                             radius: 10
 
                             GridLayout{
@@ -383,7 +407,7 @@ ApplicationWindow {
                         }
                     }
                 path: Path {
-                    startX: 200
+                    startX: 50
                     startY: 0
                     /*PathAttribute {
                         name: "iconScale";
@@ -397,9 +421,9 @@ ApplicationWindow {
                         name: "iconScale";
                         value: 1.0 }*/
                     PathQuad {
-                        x: 100;
+                        x: -50;
                         y: appWindow.height;
-                        controlX: 450;
+                        controlX: 420;
                         controlY: appWindow.height/2 }
                     /*PathAttribute {
                         name: "iconScale";
@@ -431,34 +455,34 @@ ApplicationWindow {
                 id: shop
                 anchors.fill: parent
                 cellHeight: 150.0
-                cellWidth : 200.0
+                cellWidth : swipe.width/2 - 20
                 clip: true
 
                 model: ListModel{
                     ListElement{
                         name:"Выходной"
                         cost:2
-                        pic:""
+                        pic:"qrc:/broken.png"
                     }
                     ListElement{
                         name:"День работы дома"
                         cost:1
-                        pic:""
+                        pic:"qrc:/broken.png"
                     }
                     ListElement{
                         name:"Неделя на час раньше"
                         cost:1
-                        pic:""
+                        pic:"qrc:/broken.png"
                     }
                     ListElement{
                         name:"Неделя такси"
                         cost:1
-                        pic:""
+                        pic:"qrc:/taxi.png"
                     }
                     ListElement{
                         name:"Премия"
                         cost:1
-                        pic:""
+                        pic:"qrc:/gold.png"
                     }
                 }
                 delegate: Item{
@@ -469,6 +493,50 @@ ApplicationWindow {
                         anchors.fill: parent
                         source: (cost<2)?"qrc:/chest1.png":"qrc:/chest2.png"
                         fillMode: Image.PreserveAspectFit
+                        GridLayout{
+                            anchors.fill: parent
+                            columns: 3
+                            rows:3
+                            Image{
+                                Layout.column:0
+                                Layout.row:0
+                                Layout.preferredHeight: 30
+                                Layout.preferredWidth: 30
+                                fillMode: Image.PreserveAspectFit
+                                source: "qrc:/star2.png"
+                            }
+
+                            Text{// стоимость бонуса
+                               text:cost;
+                               Layout.column:1
+                               Layout.columnSpan: 2
+                               Layout.row:0
+                               font.pixelSize: 30
+                               font.bold: true
+                               color: "yellow"
+                               horizontalAlignment:Text.AlignLeft
+                            }
+                            Image{// иконка бонуса
+                                Layout.row:1
+                                Layout.column:1
+                                Layout.fillHeight: true
+                                Layout.fillWidth: true
+                                fillMode: Image.PreserveAspectFit
+                                source: pic
+                            }
+                            Text{// название бонуса
+                                Layout.row:2
+                                Layout.column:1
+                                Layout.columnSpan: 2
+                                Layout.preferredHeight: 30
+                                Layout.fillWidth: true
+                                horizontalAlignment:Text.AlignHCenter
+                                text:name
+                                font.pixelSize: 20
+                                font.bold: true
+                                color: "yellow"
+                            }
+                        }
                     }
                     DropShadow {
                         id: shadow2
@@ -482,10 +550,32 @@ ApplicationWindow {
                         transparentBorder: true
                         opacity: 0.8
                     }
+                    ParticleSystem {
+                        id: particles
+                        anchors.fill: parent
+                        ImageParticle {
+                            source: "qrc:/star.png"
+                            alpha: 0
+                            colorVariation: 0.6
+                        }
+
+                        Emitter {
+                            id: burstEmitter
+                            x: parent.width/2
+                            y: parent.height/3
+                            emitRate: 500
+                            lifeSpan: 1000
+                            enabled: false
+                            velocity: AngleDirection{magnitude: 64; angleVariation: 360}
+                            size: 50
+                            sizeVariation: 20
+                        }
+                    }
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            //TODO вспышка
+                            burstEmitter.burst(500);//TODO вспышка
+                            stat.text = stat.text - 1
                         }
                     }
                 }
