@@ -157,26 +157,51 @@ ApplicationWindow {
                         team:"Бек-разработка"
                         pict:"qrc:/1_1.png"
                         clr:"#FF010101"
+                        metr1 : 94
+                        metr2 : 66
+                        metr3 : 97
+                        metr4 : 78
+                        metr5 : 63
                     }
                     ListElement{//2
                         team:"Фронт-разработка"
                         pict:"qrc:/2_2.png"
                         clr:"#FFDDDDDD"
+                        metr1 : 61
+                        metr2 : 52
+                        metr3 : 68
+                        metr4 : 88
+                        metr5 : 64
                     }
                     ListElement{//3
                         team:"Маркетинг"
                         pict:"qrc:/3_3.png"
                         clr:"#FF9A1324"
+                        metr1 : 84
+                        metr2 : 67
+                        metr3 : 65
+                        metr4 : 97
+                        metr5 : 99
                     }
                     ListElement{//4
                         team:"Техподдержка"
                         pict:"qrc:/4_4.png"
                         clr:"#FF002E72"
+                        metr1 : 66
+                        metr2 : 95
+                        metr3 : 71
+                        metr4 : 98
+                        metr5 : 60
                     }
                     ListElement{//5
                         team:"Тестировщики"
                         pict:"qrc:/5_5.png"
                         clr:"#FFFED700"
+                        metr1 : 54
+                        metr2 : 56
+                        metr3 : 83
+                        metr4 : 70
+                        metr5 : 88
                     }
                 }
 
@@ -201,29 +226,69 @@ ApplicationWindow {
                                     Layout.preferredWidth: delegate.height
                                     Layout.row: 0
                                     Layout.column: 0
-                                    Layout.rowSpan: 3                                    source: pict // иконка команды
+                                    Layout.rowSpan: 3
+                                    source: pict // иконка команды
                                     opacity: 0.8
                                 }
                                 Label{
-                                    text:
+                                    text: metr1
+                                    font.pixelSize: 40
+                                    font.bold: (metr1>80)?true:false
+                                    color: (metr1>80)
+                                           ?"green"
+                                           :(metr1>70)?"yellow":"red"
                                     Layout.row: 0
                                     Layout.column: 1
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
                                 }
                                 Label{
+                                    text: metr2
+                                    font.pixelSize: 40
+                                    font.bold: (metr2>80)?true:false
+                                    color: (metr2>80)
+                                           ?"green"
+                                           :(metr2>70)?"yellow":"red"
                                     Layout.row: 1
                                     Layout.column: 1
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
                                 }
                                 Label{
+                                    text: metr3
+                                    font.pixelSize: 40
+                                    font.bold: (metr3>80)?true:false
+                                    color: (metr3>80)
+                                           ?"green"
+                                           :(metr3>70)?"yellow":"red"
                                     Layout.row: 2
                                     Layout.column: 1
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
                                 }
                                 Label{
+                                    text: metr4
+                                    font.pixelSize: 40
+                                    font.bold: (metr4>80)?true:false
+                                    color: (metr4>80)
+                                           ?"green"
+                                           :(metr4>70)?"yellow":"red"
                                     Layout.row: 0
                                     Layout.column: 2
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
                                 }
                                 Label{
+                                    text: metr5
+                                    font.pixelSize: 40
+                                    font.bold: (metr5>80)?true:false
+                                    color: (metr5>80)
+                                           ?"green"
+                                           :(metr5>70)?"yellow":"red"
                                     Layout.row: 1
                                     Layout.column: 2
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
                                 }
                             }
                         }
