@@ -16,5 +16,10 @@
         <file>ind2.png</file>
         <file>ind3.png</file>
         <file>fire.png</file>
+        <file>shield.png</file>
+        <file>sword.png</file>
+        <file>banner.png</file>
+        <file>chest1.png</file>
+        <file>chest2.png</file>
     </qresource>
 </RCC>

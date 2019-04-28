@@ -207,7 +207,7 @@ ApplicationWindow {
 
                 delegate:
                     Item{
-                        width: 500
+                        width: 400
                         height: 150
                         Rectangle{
                             id : delegate
@@ -219,8 +219,11 @@ ApplicationWindow {
 
                             GridLayout{
                                 anchors.fill: parent
-                                rows: 3
+                                anchors.margins: 5
+                                rows: 4
                                 columns: 3
+
+                                rowSpacing : 3
                                 Image{ // иконка команды
                                     Layout.fillHeight: true
                                     Layout.preferredWidth: delegate.height
@@ -230,21 +233,55 @@ ApplicationWindow {
                                     source: pict // иконка команды
                                     opacity: 0.8
                                 }
-                                Label{
-                                    text: metr1
-                                    font.pixelSize: 40
-                                    font.bold: (metr1>80)?true:false
-                                    color: (metr1>80)
-                                           ?"green"
-                                           :(metr1>70)?"yellow":"red"
+                                Label{ // название команды
                                     Layout.row: 0
+                                    Layout.column: 1
+                                    Layout.columnSpan: 2
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 35
+                                    text: team
+                                    color: "white"
+                                    font.family: "SWGothe"
+                                    font.pixelSize: 30
+                                    font.bold: true
+                                }
+
+                                Image{ // метрика 1
+                                    source: (metr1>80)
+                                            ?"qrc:/shield.png"
+                                            :(metr1>70)
+                                              ?"qrc:/banner.png"
+                                              :"qrc:/sword.png"
+                                    Layout.row: 1
                                     Layout.column: 1
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
+                                    fillMode: Image.PreserveAspectFit
+                                    Label{
+                                        anchors.fill: parent
+                                        text: metr1
+                                        font.pixelSize: 30
+                                        font.bold: (metr1>80)?true:false
+                                        color: (metr1>80)
+                                               ?"green"
+                                               :(metr1>70)?"yellow":"red"
+
+                                    }
                                 }
-                                Label{
+                                Image{ // метрика 2
+                                    source: (metr2>80)
+                                            ?"qrc:/shield.png"
+                                            :(metr2>70)
+                                              ?"qrc:/banner.png"
+                                              :"qrc:/sword.png"
+                                    Layout.row: 2
+                                    Layout.column: 1
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    fillMode: Image.PreserveAspectFit
+                                    Label{
                                     text: metr2
-                                    font.pixelSize: 40
+                                    font.pixelSize: 30
                                     font.bold: (metr2>80)?true:false
                                     color: (metr2>80)
                                            ?"green"
@@ -253,10 +290,21 @@ ApplicationWindow {
                                     Layout.column: 1
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
-                                }
-                                Label{
+                                }}
+                                Image{ // метрика 3
+                                    source: (metr3>80)
+                                            ?"qrc:/shield.png"
+                                            :(metr3>70)
+                                              ?"qrc:/banner.png"
+                                              :"qrc:/sword.png"
+                                    Layout.row: 3
+                                    Layout.column: 1
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    fillMode: Image.PreserveAspectFit
+                                    Label{
                                     text: metr3
-                                    font.pixelSize: 40
+                                    font.pixelSize: 30
                                     font.bold: (metr3>80)?true:false
                                     color: (metr3>80)
                                            ?"green"
@@ -265,10 +313,21 @@ ApplicationWindow {
                                     Layout.column: 1
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
-                                }
-                                Label{
+                                }}
+                                Image{ // метрика 4
+                                    source: (metr4>80)
+                                            ?"qrc:/shield.png"
+                                            :(metr4>70)
+                                              ?"qrc:/banner.png"
+                                              :"qrc:/sword.png"
+                                    Layout.row: 1
+                                    Layout.column: 2
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    fillMode: Image.PreserveAspectFit
+                                    Label{
                                     text: metr4
-                                    font.pixelSize: 40
+                                    font.pixelSize: 30
                                     font.bold: (metr4>80)?true:false
                                     color: (metr4>80)
                                            ?"green"
@@ -277,10 +336,21 @@ ApplicationWindow {
                                     Layout.column: 2
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
-                                }
-                                Label{
+                                }}
+                                Image{ // метрика 5
+                                    source: (metr5>80)
+                                            ?"qrc:/shield.png"
+                                            :(metr5>70)
+                                              ?"qrc:/banner.png"
+                                              :"qrc:/sword.png"
+                                    Layout.row: 2
+                                    Layout.column: 2
+                                    Layout.fillHeight: true
+                                    Layout.fillWidth: true
+                                    fillMode: Image.PreserveAspectFit
+                                    Label{
                                     text: metr5
-                                    font.pixelSize: 40
+                                    font.pixelSize: 30
                                     font.bold: (metr5>80)?true:false
                                     color: (metr5>80)
                                            ?"green"
@@ -289,7 +359,7 @@ ApplicationWindow {
                                     Layout.column: 2
                                     Layout.fillHeight: true
                                     Layout.fillWidth: true
-                                }
+                                }}
                             }
                         }
 
@@ -304,6 +374,12 @@ ApplicationWindow {
                             color: "black"
                             transparentBorder: true
                             opacity: 0.8
+                        }
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                swipe.setCurrentIndex(1);
+                            }
                         }
                     }
                 path: Path {
@@ -333,6 +409,9 @@ ApplicationWindow {
 
         }
         Page{ // статистика команды
+            background: Item{
+                opacity: 0.2
+            }
             ChartView {
                 anchors.fill: parent
                 //theme: ChartView.ChartThemeBrownSand
@@ -345,12 +424,77 @@ ApplicationWindow {
             }
         }
         Page{ // магазин бонусов
+            background: Item{
+                opacity: 0.2
+            }
             GridView{// бонусы
+                id: shop
+                anchors.fill: parent
+                cellHeight: 150.0
+                cellWidth : 200.0
+                clip: true
 
+                model: ListModel{
+                    ListElement{
+                        name:"Выходной"
+                        cost:2
+                        pic:""
+                    }
+                    ListElement{
+                        name:"День работы дома"
+                        cost:1
+                        pic:""
+                    }
+                    ListElement{
+                        name:"Неделя на час раньше"
+                        cost:1
+                        pic:""
+                    }
+                    ListElement{
+                        name:"Неделя такси"
+                        cost:1
+                        pic:""
+                    }
+                    ListElement{
+                        name:"Премия"
+                        cost:1
+                        pic:""
+                    }
+                }
+                delegate: Item{
+                    height: shop.cellHeight
+                    width: shop.cellWidth
+                    Image{
+                        id : imgChest
+                        anchors.fill: parent
+                        source: (cost<2)?"qrc:/chest1.png":"qrc:/chest2.png"
+                        fillMode: Image.PreserveAspectFit
+                    }
+                    DropShadow {
+                        id: shadow2
+                        anchors.fill: imgChest
+                        source: imgChest
+                        horizontalOffset: 10
+                        verticalOffset: 10
+                        radius: 20
+                        samples: 15
+                        color: "black"
+                        transparentBorder: true
+                        opacity: 0.8
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            //TODO вспышка
+                        }
+                    }
+                }
             }
         }
         Page{ // рулетка
-
+            background: Item{
+                opacity: 0.2
+            }
         }
     }
 
