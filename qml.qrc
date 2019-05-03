@@ -28,5 +28,8 @@
         <file>gold.png</file>
         <file>taxi.png</file>
         <file>broken.png</file>
+        <file>PageTeamStat.qml</file>
+        <file>PageRoulette.qml</file>
+        <file>ind4.png</file>
     </qresource>
 </RCC>

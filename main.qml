@@ -12,7 +12,6 @@ ApplicationWindow {
     visible: true
     width: 600
     height: 800
-    title: qsTr("Hello World")
     header: Rectangle{
         id : hdr
         visible: false
@@ -432,20 +431,8 @@ ApplicationWindow {
             }
 
         }
-        Page{ // статистика команды
-            background: Item{
-                opacity: 0.2
-            }
-            ChartView {
-                anchors.fill: parent
-                //theme: ChartView.ChartThemeBrownSand
-                //antialiasing: true
-                BarSeries {
-                    id: mySeries
-                    axisX: BarCategoryAxis { categories: ["%усп.тст.", "%усп.сб.", "задачи", "комм", "%покр."] }
-                    BarSet { label: "Бек-разработка"; values: [80, 60, 50, 90, 80] }
-                }
-            }
+        PageTeamStat {
+            id: pageTeamStat
         }
         Page{ // магазин бонусов
             background: Item{
@@ -486,9 +473,10 @@ ApplicationWindow {
                     }
                 }
                 delegate: Item{
+                    id : itmChest
                     height: shop.cellHeight
                     width: shop.cellWidth
-                    Image{
+                    Image{ // сундук
                         id : imgChest
                         anchors.fill: parent
                         source: (cost<2)?"qrc:/chest1.png":"qrc:/chest2.png"
@@ -497,7 +485,7 @@ ApplicationWindow {
                             anchors.fill: parent
                             columns: 3
                             rows:3
-                            Image{
+                            Image{ // звёздочка в углу
                                 Layout.column:0
                                 Layout.row:0
                                 Layout.preferredHeight: 30
@@ -505,7 +493,6 @@ ApplicationWindow {
                                 fillMode: Image.PreserveAspectFit
                                 source: "qrc:/star2.png"
                             }
-
                             Text{// стоимость бонуса
                                text:cost;
                                Layout.column:1
@@ -562,7 +549,7 @@ ApplicationWindow {
                         Emitter {
                             id: burstEmitter
                             x: parent.width/2
-                            y: parent.height/3
+                            y: parent.height/2
                             emitRate: 500
                             lifeSpan: 1000
                             enabled: false
@@ -574,17 +561,25 @@ ApplicationWindow {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            burstEmitter.burst(500);//TODO вспышка
-                            stat.text = stat.text - 1
+                            if(stat.text > 0)
+                            {
+                                burstEmitter.pulse(500);//TODO вспышка
+                                shopPath1.startX = 0.0;
+                                shopPath1.startY = 0.0;
+                                shopPath2.ext_x = itmChest.x + itmChest.width/2.0
+                                shopPath2.ext_y = itmChest.y + itmChest.height/2.0
+                                shopAnimation.start();
+                                emitterTrail.pulse(1000);
+                                --(stat.text);
+                            }
                         }
                     }
                 }
             }
+
         }
-        Page{ // рулетка
-            background: Item{
-                opacity: 0.2
-            }
+        PageRoulette {
+            id: pageRoulette
         }
     }
 
@@ -613,16 +608,16 @@ ApplicationWindow {
                     property var indicatorIcons:
                         ["qrc:/ind1.png",
                         "qrc:/ind2.png",
-                        "qrc:/ind3.png"]
+                        "qrc:/ind3.png",
+                        "qrc:/ind4.png"]
                     fillMode: Image.PreserveAspectFit
                     source: indicatorIcons[index]
                     anchors.fill: parent
                 }
             }
-
     }
 
-    RowLayout{
+    RowLayout{ // нижняя панель навигации
         id : tabBar
         width: parent.width
         height: 100
@@ -637,21 +632,22 @@ ApplicationWindow {
                 Layout.fillHeight: true
                 Layout.preferredWidth: tabBar.width/3
 
-                /*background:Image{
-                    anchors.fill: parent
-                    anchors.margins: 0
-                    source: modelData
-                    fillMode: Image.PreserveAspectFit
-                }*/
                 padding: 10
-                contentItem:  Image{
-                    //anchors.fill: parent
+                contentItem:  Item{
                     anchors.margins: 10
-                    source: modelData
-
-                    //height: 50
-                    //width: width
-                    fillMode: Image.PreserveAspectFit
+                    Image{
+                        id : imgTabBtn
+                        anchors.fill: parent
+                        source: modelData
+                        fillMode: Image.PreserveAspectFit
+                    }
+                    Glow{
+                        anchors.fill: imgTabBtn
+                        radius: 8
+                        samples: 17
+                        color: "white"
+                        source: imgTabBtn
+                    }
                 }
                 background: Image{
                     source: (swipe.currentIndex==index)
@@ -663,6 +659,64 @@ ApplicationWindow {
                     swipe.currentIndex= index
                 }
             }
+        }
+    }
+
+    PathInterpolator { // анимация №1 магазина
+        id : shopPath
+        path: Path {
+            id : shopPath1
+            startX: 0.0
+            startY: 0.0
+            PathQuad {
+                property real ext_x: 500
+                property real ext_y: 500
+                id: shopPath2
+                x: ext_x
+                y: ext_y
+                controlX: ext_x / 3;
+                controlY: ext_y * 2.0 / 3.0;
+            }
+        }
+        NumberAnimation on progress {
+            id : shopAnimation
+            easing.type: Easing.InExpo
+            running: false
+            from: 0.0; to: 1.0;
+            duration: 500
+        }
+
+    }
+
+    Rectangle{ // спрайт анимации №1 магазина
+        id : rctSprite
+        color:"#00FFFFFF"
+        x:shopPath.x
+        y:shopPath.y
+        width: 20
+        height: 20
+    }
+    ParticleSystem { // след из частиц
+        id: particlesShop1
+        anchors.fill: parent
+        //running: false
+        ImageParticle {
+            source: "qrc:/star.png"
+            alpha: 0
+            colorVariation: 0.6
+        }
+
+        Emitter {
+            id: emitterTrail
+            x: rctSprite.x + rctSprite.width/2
+            y: rctSprite.y + rctSprite.height/2
+            emitRate: 1000
+            lifeSpan: 500
+            enabled: false
+            velocity: AngleDirection{magnitude: 10; angleVariation: 360}
+            velocityFromMovement : 0.0
+            size: 50
+            sizeVariation: 20
         }
     }
 }
